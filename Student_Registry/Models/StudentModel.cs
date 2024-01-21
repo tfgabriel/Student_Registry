@@ -1,4 +1,4 @@
-﻿namespace Student_Registry
+﻿namespace Student_Registry.Models
 {
     public class Student
     {

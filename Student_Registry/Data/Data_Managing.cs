@@ -1,25 +1,26 @@
 ﻿using Microsoft.Data.SqlClient;
+using Student_Registry.Models;
 using System.Data.SqlClient;
 using System.Diagnostics.Eventing.Reader;
 using System.Drawing.Text;
 
-namespace Student_Registry
+namespace Student_Registry.Data
 {
     public class Management
     {
-        public Teacher BuildTeacherModel(string email, string password)
+        public Teacher BuildTeacherModel(string email, string password, string classes)
         {
             string name = email.Split('.', '@')[0] + " " + email.Split('.', '@')[1];
-            Teacher teacher = new Teacher{ Email = email, Password = password, Name = name};
+            Teacher teacher = new Teacher { Email = email, Password = password, Name = name, Classes = classes };
             return teacher;
         }
 
-        public readonly string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"D:\\Proiecte C#\\Proiecte\\Student_Registry\\Student_Registry\\School.mdf\";Integrated Security=True";
+        public readonly string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"D:\\Proiecte C#\\Proiecte\\Student_Registry\\Student_Registry\\Databases\\School.mdf\";Integrated Security=True";
 
         public void LoadData()
         {
             ClearDB();
-            using(SqlConnection con = new SqlConnection(conString))
+            using (SqlConnection con = new SqlConnection(conString))
             {
                 con.Open();
 
@@ -33,10 +34,10 @@ namespace Student_Registry
 
                 using (StreamReader reader = new StreamReader(filePathTeachers))
                 {
-                    while(reader.Peek() >= 0)
+                    while (reader.Peek() >= 0)
                     {
                         var line = reader.ReadLine().Split("*");
-                        using(SqlCommand cmd = new SqlCommand(cmdTeachers, con))
+                        using (SqlCommand cmd = new SqlCommand(cmdTeachers, con))
                         {
                             cmd.Parameters.AddWithValue("Email", line[0]);
                             cmd.Parameters.AddWithValue("Password", line[1]);
@@ -78,40 +79,89 @@ namespace Student_Registry
                 }
             }
 
-            
+
+        }
+
+        public ClassModel BuildClass(string classes)
+        {
+            ClassModel classshell = new ClassModel();
+            string cmdsearchClass = "Select Name, Students from Classes where Name = @name ";
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand(cmdsearchClass, con))
+                {
+                    cmd.Parameters.AddWithValue("Name", classes);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            classshell.Name = (string)reader["Name"];
+                            classshell.Students = (string)reader["Students"];
+
+                        }
+                    }
+                }
+            }
+
+            return classshell;
+        }
+
+        public Student BuildStudent(string name)
+        {
+            Student studentshell = new Student();
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                con.Open();
+                string cmdsearchStudent = "Select Name, Grades from Grades where Name = @name";
+                using (SqlCommand cmd = new SqlCommand(cmdsearchStudent, con))
+                {
+                    cmd.Parameters.AddWithValue("Name", name);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            studentshell.Name = (string)reader["Name"];
+                            studentshell.Grades = (string)reader["Grades"];
+                        }
+                    }
+                }
+            }
+            return studentshell;
         }
 
         public Teacher CheckTeacher(string username)
         {
             Teacher teachershell = new Teacher();
-            using(SqlConnection con = new SqlConnection(conString))
+            using (SqlConnection con = new SqlConnection(conString))
             {
                 con.Open();
-                string cmdsearchTeacher = "Select Email, Password from Teachers where Email = @email";
+                string cmdsearchTeacher = "Select Email, Password, Classes from Teachers where Email = @email";
 
-                using(SqlCommand cmd = new SqlCommand( cmdsearchTeacher, con))
+                using (SqlCommand cmd = new SqlCommand(cmdsearchTeacher, con))
                 {
-                    cmd.Parameters.AddWithValue ("Email", username);
-                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("Email", username);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             teachershell.Name = (string)reader["Email"];
                             teachershell.Password = (string)reader["Password"];
+                            teachershell.Classes = (string)reader["Classes"];
 
-                            
+
                         }
-                        
-                            
+
+
                     }
                 }
             }
 
             return teachershell;
         }
-        private void ClearDB() 
+        private void ClearDB()
         {
-            using(SqlConnection con = new SqlConnection(conString))
+            using (SqlConnection con = new SqlConnection(conString))
             {
                 con.Open();
                 string cmdText = "Delete from Teachers";

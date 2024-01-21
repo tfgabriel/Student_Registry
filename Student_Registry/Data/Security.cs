@@ -2,17 +2,17 @@
 using System.Text;
 using System.Net.Mail;
 
-namespace Student_Registry
+namespace Student_Registry.Data
 {
     public class Security
     {
         public bool ValidEmail(string email)
         {
-                if (email.Contains("@liceu.com"))
-                {
-                    return true;
-                }
-                else return false;
+            if (email.Contains("@liceu.com"))
+            {
+                return true;
+            }
+            else return false;
         }
 
         public bool ValidPassword(string password)
@@ -33,7 +33,7 @@ namespace Student_Registry
                     capitalletterct++;
                 if (x >= '0' && x <= '9')
                     numberct++;
-                if ((x >= 33 && x <= 40) || (x >= 92 && x <= 96) || (x >= 123 && x <= 127))
+                if (x >= 33 && x <= 40 || x >= 92 && x <= 96 || x >= 123 && x <= 127)
                     signct++;
             }
 
@@ -41,11 +41,11 @@ namespace Student_Registry
                 return true;
             else
                 MessageBox.Show("Password must have at least a sign, a capital letter and a number.");
-                return false;
+            return false;
         }
         public string HashPassword(string passsword)
         {
-            
+
             using var h = SHA256.Create();
             byte[] bytes = h.ComputeHash(Encoding.UTF8.GetBytes(passsword));
 

@@ -1,3 +1,6 @@
+using Student_Registry.Data;
+using Student_Registry.Models;
+
 namespace Student_Registry
 {
     public partial class loginform : Form
@@ -11,6 +14,9 @@ namespace Student_Registry
 
         private void loginbtn_Click(object sender, EventArgs e)
         {
+            email.Text = "Maria.Popescu@liceu.com";
+            password.Text = "MariaPop8";
+
             Security s = new Security();
 
             if (email.Text == string.Empty || password.Text == string.Empty)
@@ -28,7 +34,7 @@ namespace Student_Registry
             else
             {
                 
-                Teacher teacher = manager.BuildTeacherModel(email.Text, s.HashPassword(password.Text));
+                Teacher teacher = manager.BuildTeacherModel(email.Text, s.HashPassword(password.Text), manager.CheckTeacher(email.Text).Classes);
                 this.Visible = false;
                 studentsform studentsform = new studentsform
                 {
@@ -40,6 +46,8 @@ namespace Student_Registry
 
 
             }
+
+            
         }
 
         private void loginform_Load(object sender, EventArgs e)
