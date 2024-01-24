@@ -9,88 +9,126 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Student_Registry.Data;
 using Student_Registry.Models;
-using Student_Registry.UI;
+
 
 namespace Student_Registry
 {
-    public partial class studentsform : Form
+    public partial class Studentsform : Form
     {
         public Teacher teacher;
-        public studentsform()
+        
+
+        public Studentsform()
         {
             InitializeComponent();
+            panel3.Visible = false;
         }
-        
+
         public Management manager = new Management();
-        public Interface intf = new Interface();
+
+        public string grade;
+        public int buttonpressed;
+        public List<Label> label = new List<Label>();
+        public List<Button> button = new List<Button>();
+
 
         private void studentsform_Load(object sender, EventArgs e)
         {
-            
+            for(int i = 0; i < 10; i++)
+            {
+                comboBox1.Items.Add((i+1).ToString());
+            }
+
             label2.Text = "Hello, " + teacher.Name + "!";
             string[] classes = teacher.Classes.Split(" ");
 
-            int i = 0;
-            Point point = new Point();
-            //button1 .Text = classes[0];
-            //button2 .Text = classes[1];
-            //button3 .Text = classes[2];
-            //button4 .Text = classes[3];
+            //int i = 0;
+            //Point point = new Point();
 
-            foreach (string className in classes)
+            button1.Text = classes[0];
+            button2.Text = classes[1];
+            button3.Text = classes[2];
+            button4.Text = classes[3];
+
+            /*foreach (string className in classes)
             {
                 point.X = 10;
                 point.Y = 45 * i;
                 panel1.Controls.Add(intf.AddClass(className));
 
                 i++;
-            }
-            //int j = 0;
-            //foreach (Button button in panel1.Controls)
-            //{
-                //point.X = 10;
-                //point.Y = 45 * j;
-               // while (manager.BuildClass(button.Text).Students[j] != string.Empty)
-               //     panel2.Controls.Add(new Label { Text = manager.BuildClass(button.Text).Students[j], Height = 40, Width = 150, Location = point });
-              //  j++;
-            //}
+            }*/
+
 
         }
 
-       
+        public Button AddGrade(string name, Point point, int width, int height)
+        {
+            Button buton = new Button
+            {
+                Name = name,
+                Width = width,
+                Height = height,
+                Location = point,
+                Text = "Add Grade",
+
+            };
+            buton.Click += new EventHandler(buton_Click);
+            return buton;
+        }
+
+        public Label Grades(string name, Point point, int width, int height, string grades)
+        {
+            Label grade = new Label
+            {
+
+                Name = name,
+                Width = width,
+                Height = height,
+                Location = point,
+                Text = grades
+
+            };
+
+
+            return grade;
+        }
+
+        private void buton_Click(object sender, EventArgs e)
+        {
+            panel3.Visible = true;
+        }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
+            label.Clear();
             panel2.Controls.Clear();
             string[] students = manager.BuildClass(button1.Text).Students.Split("/");
-            
             Point point = new Point();
             int j = 0;
+
             foreach (string student in students)
             {
                 point.X = 10;
-                point.Y = 45*j;
+                point.Y = 45 * j;
 
-                panel2.Controls.Add(new Label { Text = student , Width = 150, Location = point});
+                panel2.Controls.Add(new Label { Text = student, Width = 150, Location = point });
+
                 string grades = manager.BuildStudent(student).Grades;
                 point.Y += 20;
-                panel2.Controls.Add(new Label { Text = grades, Width = 200, Location = point });
+
+
+                label.Add(Grades("grade" + j, point, 320, 35, grades));
+                panel2.Controls.Add(label[j]);
+                
+
                 point.X += 390;
-                panel2.Controls.Add(intf.AdaugaNota("buton"+j, point, 150, 35));
+                button.Add(AddGrade("buton" + j, point, 150, 35));
+                panel2.Controls.Add(button[j]);
 
                 j++;
             }
-            
-            //panel2.Controls.Add(new Button { Text = "Adauga Nota", Width = 150, Height = 35, Location = point, Name = "buton" });
-            //panel2.Controls.Add(new Label { Text = students[0] + "\n" + students[1] + "\n" + students[2] });
-            //panel2.Controls.Add(new Label { Text = students[0] + "\n" + students[1] + "\n" + students[2] });
-
-
-
-
-
-            //panel2.Controls.Add(new Label { Text = manager.BuildClass(button1.Text).Students[j], Height = 40, Width = 150, Location = point });
-            //j--;
 
 
         }
@@ -105,14 +143,17 @@ namespace Student_Registry
             foreach (string student in students)
             {
                 point.X = 10;
-                point.Y = 60 * j;
-                int i = 1;
+                point.Y = 45 * j;
 
-                panel2.Controls.Add(new Label { Text = student, Width = 200, Location = point });
+                panel2.Controls.Add(new Label { Text = student, Width = 150, Location = point });
+
                 string grades = manager.BuildStudent(student).Grades;
                 point.Y += 20;
-                panel2.Controls.Add(new Label { Text = grades, Width = 500, Location = point });
-                
+                panel2.Controls.Add(new Label { Text = grades, Width = 200, Location = point });
+
+                point.X += 390;
+                panel2.Controls.Add(AddGrade("buton" + j, point, 150, 35));
+
                 j++;
             }
         }
@@ -127,20 +168,19 @@ namespace Student_Registry
             foreach (string student in students)
             {
                 point.X = 10;
-                point.Y = 60 * j;
-                int i = 1;
+                point.Y = 45 * j;
 
-                panel2.Controls.Add(new Label { Text = student, Width = 200, Location = point });
+                panel2.Controls.Add(new Label { Text = student, Width = 150, Location = point });
+
                 string grades = manager.BuildStudent(student).Grades;
                 point.Y += 20;
-                panel2.Controls.Add(new Label { Text = grades, Width = 500, Location = point });
-                //point.X += 100;
-                //panel2.Controls.Add(new Button { Text = "Adauga Nota", Width = 150, Location = point, Name = "buton"+j });
+                panel2.Controls.Add(new Label { Text = grades, Width = 200, Location = point });
+
+                point.X += 390;
+                panel2.Controls.Add(AddGrade("buton" + j, point, 150, 35));
 
                 j++;
             }
-
-            //panel2.Controls.Add(new Button { Text = "Adauga Nota", Width = 150, Location = point,  });
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -153,16 +193,35 @@ namespace Student_Registry
             foreach (string student in students)
             {
                 point.X = 10;
-                point.Y = 60 * j;
-                int i = 1;
+                point.Y = 45 * j;
 
-                panel2.Controls.Add(new Label { Text = student, Width = 200, Location = point });
+                panel2.Controls.Add(new Label { Text = student, Width = 150, Location = point });
+
                 string grades = manager.BuildStudent(student).Grades;
-                point.Y += 60;
-                panel2.Controls.Add(new Label { Text = grades, Width = 500, Location = point });
+                point.Y += 20;
+                panel2.Controls.Add(new Label { Text = grades, Width = 200, Location = point });
+
+                point.X += 390;
+                panel2.Controls.Add(AddGrade("buton" + j, point, 150, 35));
 
                 j++;
             }
+        }
+
+        
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem.ToString != null && monthCalendar1.SelectionStart.ToShortDateString() != null)
+            {
+                grade = comboBox1.SelectedItem.ToString() + "/" + monthCalendar1.SelectionStart.ToShortDateString().Split("/")[1] + "." + monthCalendar1.SelectionStart.ToShortDateString().Split("/")[0];
+                
+                label[0].Text += " " + grade;
+            }
+                
+
+            else
+                MessageBox.Show("Please select a date and a grade.");
         }
     }
 }

@@ -36,14 +36,13 @@ namespace Student_Registry
                 
                 Teacher teacher = manager.BuildTeacherModel(email.Text, s.HashPassword(password.Text), manager.CheckTeacher(email.Text).Classes);
                 this.Visible = false;
-                studentsform studentsform = new studentsform
+                Studentsform studentsform = new Studentsform
                 {
                     teacher = teacher,
                 };
 
                 studentsform.ShowDialog();
                 this.Close();
-
 
             }
 

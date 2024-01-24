@@ -1,6 +1,6 @@
 ﻿namespace Student_Registry
 {
-    partial class studentsform
+    partial class Studentsform
     {
         /// <summary>
         /// Required designer variable.
@@ -35,7 +35,13 @@
             button2 = new Button();
             button1 = new Button();
             panel2 = new Panel();
+            monthCalendar1 = new MonthCalendar();
+            label3 = new Label();
+            comboBox1 = new ComboBox();
+            button5 = new Button();
+            panel3 = new Panel();
             panel1.SuspendLayout();
+            panel3.SuspendLayout();
             SuspendLayout();
             // 
             // label2
@@ -105,18 +111,65 @@
             panel2.Size = new Size(641, 375);
             panel2.TabIndex = 3;
             // 
-            // studentsform
+            // monthCalendar1
+            // 
+            monthCalendar1.Location = new Point(25, 9);
+            monthCalendar1.Name = "monthCalendar1";
+            monthCalendar1.TabIndex = 4;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(51, 275);
+            label3.Name = "label3";
+            label3.Size = new Size(63, 25);
+            label3.TabIndex = 5;
+            label3.Text = "Grade:";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(127, 272);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(182, 33);
+            comboBox1.TabIndex = 6;
+            // 
+            // button5
+            // 
+            button5.Location = new Point(127, 324);
+            button5.Name = "button5";
+            button5.Size = new Size(112, 34);
+            button5.TabIndex = 7;
+            button5.Text = "Add";
+            button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(monthCalendar1);
+            panel3.Controls.Add(button5);
+            panel3.Controls.Add(comboBox1);
+            panel3.Controls.Add(label3);
+            panel3.Location = new Point(805, 59);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(356, 379);
+            panel3.TabIndex = 8;
+            // 
+            // Studentsform
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1197, 450);
+            Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(panel1);
             Controls.Add(label2);
-            Name = "studentsform";
+            Name = "Studentsform";
             Text = "Classes and Students";
             Load += studentsform_Load;
             panel1.ResumeLayout(false);
+            panel3.ResumeLayout(false);
+            panel3.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -129,5 +182,10 @@
         private Button button3;
         private Button button2;
         private Button button1;
+        private MonthCalendar monthCalendar1;
+        private Label label3;
+        private ComboBox comboBox1;
+        private Button button5;
+        private Panel panel3;
     }
 }
